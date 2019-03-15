@@ -1,3 +1,5 @@
+--Gilbert Lam
+--101044511
 import Codec.BMP
 import Data.ByteString
 import Data.Either
@@ -48,6 +50,9 @@ convertToASCII (grayscale, white, pattern) = if white
     then pattern !! (getLength(pattern)-1-(round(grayscale / 256 * fromIntegral(getLength pattern-1))))
     else pattern !! (round(grayscale / 256 * fromIntegral(getLength pattern - 1)))
     
+getLength :: [Char] -> Int 
+getLength [] = 0
+getLength (head : tail) = 1 + getLength(tail)
 
 convertRowToASCII :: ([Float], Bool, [Char]) -> [Char]
 convertRowToASCII ([], white, patterns) = []
@@ -57,56 +62,6 @@ convertGrayscaleToASCII :: ([[Float]], Bool, [Char]) -> [[Char]]
 convertGrayscaleToASCII ([], white, patterns)= []
 convertGrayscaleToASCII (head : tail, white, patterns) = convertRowToASCII(head, white, patterns) : convertGrayscaleToASCII(tail, white, patterns)
 
-getLength :: [Char] -> Int 
-getLength [] = 0
-getLength (head : tail) = 1 + getLength(tail)
-
-reverseString :: [Char] -> [Char]
-reverseString [] = []
-reverseString [a] = [a]
-reverseString (head : tail) = reverseString(tail) ++ [head]
-
-doesRowContainRow :: ([Char],[Char]) -> Int
-doesRowContainRow ([], []) = 0
-doesRowContainRow ([], pattern) = -1000
-doesRowContainRow (pattern, []) = 0
-doesRowContainRow (bigHead : bigTail, smallHead : smallTail) = 
-    if bigHead == smallHead 
-        then doesRowContainRow (bigTail, smallTail)
-    else 
-        1 + doesRowContainRow(bigTail, smallHead:smallTail)
-
-indexOfSubstring :: ([Char], [Char]) -> Int 
-indexOfSubstring ([],[]) = 0
-indexOfSubstring ([], string) = -1
-indexOfSubstring (string, []) = 0
-indexOfSubstring (head: string, subHead: substring) = 
-    if getLength (subHead:substring) > getLength (head:string )
-        then -1
-    else if head == subHead
-        then indexOfSubstring(string, substring)
-    else 
-        if indexOfSubstring(string, subHead: substring) == -1
-            then -1
-        else
-            1 + indexOfSubstring(string, subHead: substring)
-        
-
-doesPictureContainPicture :: ([[Char]], [[Char]], Int, Int) -> [Int]
-doesPictureContainPicture ([], [], x, y) = [x, y]
-doesPictureContainPicture ([], pattern, x, y) = [-1,-1]
-doesPictureContainPicture (pattern, [], x, y) = [x, y]
-doesPictureContainPicture (searchHead : searchTail, findHead : findTail, x ,y) = 
-    if doesRowContainRow(searchHead, findHead) >= 0 
-        then doesPictureContainPicture(searchTail, findTail, doesRowContainRow(searchHead, findHead), y)
-    else
-        doesPictureContainPicture(searchTail, findHead:findTail, x, y+1)
-        
-findPicture :: ([[Char]], [[Char]]) -> [Int]
-findPicture (search, find) = doesPictureContainPicture(search, find, 0, 0);
-
---main = do
-   -- showAsASCIIArt(convertGrayscaleToASCII(parseIntoGrayscaleVals(loadBitmap "sample_image_to_search.bmp"), False, " .-+*#@"))
-    --Prelude.put (""++doesRowContainRow("Chello","hell"))
-    --findPicture(convertGrayscaleToASCII(parseIntoGrayscaleVals(loadBitmap "sample_image_to_search.bmp"), False, ".-+*#@"),(convertGrayscaleToASCII(parseIntoGrayscaleVals(loadBitmap "sample_image_to_find.bmp"), False, ".-+*#@")))
- 
+convertPictureToASCII :: ([Char], Bool, [[(Int, Int, Int)]]) -> [[Char]]
+convertPictureToASCII (patterns, white, []) = []
+convertPictureToASCII (patterns, white, bitmap) = convertGrayscaleToASCII(parseIntoGrayscaleVals(bitmap), white, patterns)
