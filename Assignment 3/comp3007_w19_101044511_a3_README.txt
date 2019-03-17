@@ -1,0 +1,15 @@
+Name: Gilbert Lam
+Student ID: 101044511
+
+1. To run this program start GHCI and run ':l comp3007_w19_101044511_a3.hs' to load the file
+
+Questions and their corresponding functions:
+
+Q1 - checkIfNodeExists
+Q2 - checkIfEdgeExists
+Q3 - listAllNodes
+Q4 - listAllEdges
+Q5 - isSingleton
+Q6 - traverseList
+Q7 - createGraph
+Q8 - createGraphFromMatrix
