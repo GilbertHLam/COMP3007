@@ -2,10 +2,10 @@
 -- avrage (Cons (Cons EmptyList 1 2) 34 5)
 data ListOfInts = EmptyList | Single Int | Cons ListOfInts Int Int
 
-avrage :: ListOfInts -> Float
-avrage(EmptyList) = 0
-avrage(Single number) = fromIntegral number
-avrage(Cons list head tail) =  fromIntegral (getSum(list) + head + tail) / fromIntegral (getLength(list) + 2)
+avrage :: ListOfInts -> Int
+avrage(EmptyList) = 0.0
+avrage(Single number) = number * 1.0
+avrage(Cons list head tail) =  (getSum(list) + head + tail)* 1.0 / (getLength(list) + 2)* 1.0
 
 getLength :: ListOfInts -> Int
 getLength(EmptyList) = 0
@@ -45,23 +45,25 @@ getMoviesFromDecade ((movie,decade):tail) (search)
     | otherwise = getMoviesFromDecade tail search
 ----------------------------------
 
----------------------------------- C " getMoviesFromDecade year_db 10 "
-getDirectorFromYear :: Int -> [([Char], Int)] -> [([Char], [Char])]-> Maybe [Char]
-getDirectorFromYear [] list search = []
-getDirectorFromYear list [] search = []
-getDirectorFromYear [] [] search = []
-getDirectorFromYear ((movie, year):tail) directorList search = 
-----------------------------------
+-- ---------------------------------- C " getMoviesFromDecade year_db 10 "
+-- getDirectorFromYear :: Int -> [([Char], Int)] -> [([Char], [Char])]-> Maybe [Char]
+-- getDirectorFromYear [] list search = []
+-- getDirectorFromYear list [] search = []
+-- getDirectorFromYear [] [] search = []
+-- ----------------------------------
 
 
-------------------------------------------------------------------- 
-helper :: [a] -> [a]
-helper x = foo x []
+-- ------------------------------------------------------------------- 
+-- helper :: [a] -> [a]
+-- helper x = foo x []
 
-foo :: [a] -> [a] -> [a]
-foo [] x = x
-foo (h:t) x = foo t (bar h: x)
+-- foo :: [a] -> [a] -> [a]
+-- foo [] x = x
+-- foo (h:t) x = foo t (bar h: x)
 
+
+--foldr takes a list and will do operations on them and save the value to a variable
+--filter takes boolean statment and list and filters the list for true values
 sumEven :: [Int] -> Int
 sumEven h = foldr (+) 0 (filter even h)
 
